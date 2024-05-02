@@ -3,18 +3,31 @@ from typing import Union
 from Helpers.Class.user_class import *
 
 
-def new_user(name:str , user_name: str, email:str,password:str):
+def new_user(name:str , user_name: str, email:str,password:str) -> bool:
     futstore = conection()
 
     with futstore.cursor() as cursor: 
-        cursor.execute(f"SELECT COUNT(*) FROM Usuario WHERE Correo = '{email}' AND Nombre_usuario = '{user_name}'")
+        cursor.execute(f"SELECT COUNT(*) FROM Usuario WHERE Correo = '{email}'")
+        user = cursor.fetchone()
 
+    if  user != (0,):
+        return False
+    
+    with futstore.cursor() as cursor: 
+        cursor.execute(f"SELECT COUNT(*) FROM Usuario WHERE Nombre_usuario = '{user_name}'")
+        user = cursor.fetchone()
+        
+    if  user != (0,):
+        return False
+        
+        
     with futstore.cursor() as cursor:
         cursor.execute("INSERT INTO Usuario(Nombre_cliente, Nombre_usuario, Correo, Contraseña) VALUES (%s, %s, %s, %s)", (name, user_name, email, password))
 
 
     futstore.commit()
     futstore.close()
+    return True
 
 
 def select_user(username: str) -> Union[User, None]:

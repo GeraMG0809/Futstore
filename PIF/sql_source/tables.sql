@@ -45,3 +45,12 @@ CREATE TABLE VENTAS_JERSERY{
     FOREIGN KEY (Id_Jersey3) REFERENCES HISTORIAL_VENTAS(Id_Jersey) 
 };
 
+CREATE TABLE CARRITO{
+        Id_carrito INT AUTO_INCREMENT PRIMARY KEY,
+        Id_usuario_carrito INT,
+        Id_producto INT, 
+        Cantidad INT,
+        FOREIGN KEY (Id_usuario_carr) REFERENCES USUARIO(Id_usuario),
+        FOREIGN KEY (Id_producto) REFERENCES JERSEY(Id_Jersey)
+    
+};

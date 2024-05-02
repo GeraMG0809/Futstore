@@ -7,3 +7,17 @@ class User:
         self.email = datos[3]
         self.password = datos[4]
 
+    def to_dict(self):
+        return {'id': self.id,
+                'name': self.name,
+                'user': self.user,
+                'email': self.email,
+                'password': self.password}
+    
+    def from_dict(cls,data):
+        return cls(data['id'],
+                   data['name'],
+                   data['user'],
+                   data['email'],
+                   data['password'])
+   

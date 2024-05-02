@@ -8,8 +8,8 @@
   <style>
     /* Estilos para la imagen circular */
     .profile-img {
-      width: 700px; /* Tamaño de la imagen */
-      height: 700px;
+      width: 100px; /* Tamaño de la imagen */
+      height: 100px;
       object-fit: cover; /* Ajusta la imagen al tamaño */
       border-radius: 50%; /* Hace que la imagen sea circular */
       background-color: #ccc; /* Color de fondo si la imagen no se carga */
@@ -24,7 +24,7 @@
           <div class="card-body">
             <h2 class="card-title text-center">Iniciar Sesión</h2>
             <div class="text-center mb-4">
-              <img src="file:///C:/Users/Navid/OneDrive/Escritorio/Semestre%207/Base%20de%20datos/PIF/Images/Profile_pic.jpg" alt="Perfil" class="profile-img">
+              <img src="{{ url_for('static', filename='Images/Profile_pic.jpg') }}" alt="Perfil" class="profile-img">
             </div>
             <form class ="form-group"  method="post">
               <div class="form-group">
@@ -38,7 +38,7 @@
               <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
             </form>
             <div class="text-center mt-3">
-              ¿No tienes cuenta? <a href="register.html">Regístrate aquí</a>
+              ¿No tienes cuenta? <a href="{{ url_for('register') }}">Regístrate aquí</a>
             </div>
           </div>
         </div>
