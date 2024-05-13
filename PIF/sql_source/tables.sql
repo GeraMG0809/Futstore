@@ -19,31 +19,7 @@ CREATE TABLE JERSEY{
     Estado ENUM('Activo','Inactivo') NOT NULL DEFAULT 'Activo'
 };
 
-CREATE TABLE HISTORIAL_VENTAS{
-    Id_venta INT AUTO_INCREMENT PRIMARY KEY,
-    Id_usuario2 INT NOT NULL -- llave foranea del usuario
-    Monto_total FLOAT NOT NULL,
-    Tipo_pago VARCHAR(15) NOT NULL,
-    Fecha_compra DATE NOT NULL,
-    FOREIGN KEY (Id_usuario2) REFERENCES USUARIO(Id_usuario)
-};
 
-CREATE TABLE Envios{
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    Id_venta2 INT NOT NULL, -- llave foranea de la compra
-    Direccion VARCHAR(40) NOT NULL,
-    Tipo_envio VARCHAR(20) NOT NULL,
-    Fecha_envio DATE NOT NULL,
-    FOREIGN KEY (Id_venta2) REFERENCES HISTORIAL_VENTAS(Id_venta)
-};
-
-CREATE TABLE VENTAS_JERSERY{
-    Id_venta3 INT NOT NULL,
-    Id_Jersey3 INT NOT NULL,
-    PRIMARY KEY (Id_venta3, Id_Jersey3),
-    FOREIGN KEY (Id_venta3) REFERENCES HISTORIAL_VENTAS(Id_venta),
-    FOREIGN KEY (Id_Jersey3) REFERENCES HISTORIAL_VENTAS(Id_Jersey) 
-};
 
 CREATE TABLE CARRITO{
         Id_carrito INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,3 +30,28 @@ CREATE TABLE CARRITO{
         FOREIGN KEY (Id_producto) REFERENCES JERSEY(Id_Jersey)
     
 };
+
+CREATE TABLE HISTORIAL_VENTAS(
+    Id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    Id_usuario2 INT NOT NULL, -- llave foranea del usuario
+    Fecha_compra DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (Id_usuario2) REFERENCES USUARIO(Id_usuario)
+);
+
+CREATE TABLE ORDENES(
+    Id_orden INT AUTO_INCREMENT PRIMARY KEY,
+    Id_venta2 INT,
+    Id_producto INT, 
+    Cantidad INT,
+    FOREIGN KEY (Id_venta2) REFERENCES HISTORIAL_VENTAS(Id_venta),
+    FOREIGN KEY (Id_producto) REFERENCES JERSEY(Id_Jersey)
+);
+
+CREATE TABLE INVENTARIO (
+    Id_inventario INT AUTO_INCREMENT PRIMARY KEY,
+    Id_jersey INT NOT NULL,
+    Talla VARCHAR(5) NOT NULL,
+    Cantidad_disponible INT NOT NULL,
+    FOREIGN KEY (Id_jersey) REFERENCES JERSEY(Id_Jersey)
+);
+

@@ -82,9 +82,14 @@
           </select>
         </p>
         <p> ${{product.Precio}} </p>
+        {% if user %}
         <form action="{{ url_for('add_product_cart', id= product.Id) }} " method="POST">
           <input type="number" class="form-control" id="cantidad" name="cantidad"  min="1" max="10" value="1">
           <button type="submit" class="btn btn-primary">Añadir al Carrito</button>
+          {% else %}
+        <form action="{{ url_for('login') }}"></form>
+          <button type="submit" class="btn btn-primary">Logeate</button>
+          {% endif %}
         </form>
       </div>
     </div>

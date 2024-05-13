@@ -7,6 +7,8 @@ from Helpers.User import *
 from Helpers.Product import *
 from Helpers.Class.user_class import *
 from Helpers.cart import *
+from Helpers.order import *
+
 import os
 
 if __name__ == '__main__':
@@ -55,8 +57,71 @@ if __name__ == '__main__':
         user = session.get('user')
         id = session.get('user')['id']
         articulos = get_cart(id)
+        subtotal = get_subtotal(id)
 
-        return render_template('my_cart.html', user = user, articulos = articulos)
+        return render_template('my_cart.html', user = user, articulos = articulos, subtotal = subtotal)
+
+    @app.route('/remove_product_cart/<int:id>',methods = ['POST'])
+    def remove_product_cart(id):
+        user_id = session.get('user')['id']
+        remove_carr(user_id,id)
+
+        return redirect(url_for('my_cart'))
+    
+    @app.route('/update_shopping_cart', methods=['POST'])
+    def update_shopping_cart():
+        user = session.get('user')
+        articulos = get_cart(user['id'])
+        subtotal = get_subtotal(user['id'])
+
+        if request.method == 'POST':
+            envio = request.form['envio']
+            if envio == 'estandar':
+                costo = 160.0
+            elif envio == 'expres':
+                costo = 260.0
+            else:
+                costo = 0.0
+
+            total = subtotal + costo
+
+        return render_template('my_cart.html', user = user,articulos=articulos, costo=costo,subtotal = subtotal, total = total)
+
+    @app.route('/show_order')
+    def show_order():
+        user = session.get('user')
+        user_id = session.get('user')['id']
+        print(user_id)
+        print(get_orders(user_id))
+        
+        return redirect(url_for('index')) 
+
+
+    @app.route('/my_orders')
+    def my_orders():
+        user = session.get('user')
+        user_id = session.get('user')['id']
+        orders = get_orders(user_id)
+        print(orders)
+
+        return render_template('my_orders.html', user = user, orders = orders)
+
+
+    @app.route('/pago')
+    def pago():
+        user = session.get('user')['id']
+        new_order(user)
+        clear_carr(user)
+
+        return redirect(url_for('index'))
+
+
+
+
+    @app.route('/pay')
+    def pay():
+
+        return render_template('pay.html')
 
     @app.route('/product_detail/<int:id>')
     def product_detail(id):

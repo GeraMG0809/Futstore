@@ -1,0 +1,27 @@
+    /* Estilos para el cuerpo de la página y los enlaces */
+body {
+    background-color: #EEF7FF;
+    color: #4D869C;
+}
+
+a {
+    color: #CDE8E5;
+}
+
+a:hover {
+    color: #7AB2B2;
+}
+
+/* Estilos para los botones */
+.btn-primary {
+    background-color: #4D869C;
+    border-color: #4D869C;
+}
+
+.btn-primary:hover {
+    background-color: #7AB2B2;
+    border-color: #7AB2B2;
+}
+
+/* Estilos para otros elementos */
+/* Agrega aquí más estilos según lo necesites */

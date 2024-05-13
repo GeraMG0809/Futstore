@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 </head>
-<body style="background-color: #F0F8FF;">
+<body style="background-color: #F5EFE6;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">  
     <div class="container-fluid">
       <a class="navbar-brand" href="{{ url_for('index') }}">FUTSTORE</a>
@@ -46,7 +46,7 @@
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{ user.user }}</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('my_cart') }}"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
-                  <li><a class="dropdown-item" href="#"><i class="fas fa-file"></i> Mis Ordenes</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('my_orders')}}"><i class="fas fa-file"></i> Mis Ordenes</a></li>
                   <li>
                       <hr class="dropdown-divider">
                   </li>

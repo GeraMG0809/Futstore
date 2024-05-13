@@ -1,7 +1,12 @@
 from Helpers.conecction import conection
 from typing import Union
 from Helpers.Class.user_class import *
+import hashlib
 
+
+
+def truncate(string, length):
+    return string[:length]
 
 def new_user(name:str , user_name: str, email:str,password:str) -> bool:
     futstore = conection()
@@ -19,15 +24,19 @@ def new_user(name:str , user_name: str, email:str,password:str) -> bool:
         
     if  user != (0,):
         return False
-        
-        
-    with futstore.cursor() as cursor:
-        cursor.execute("INSERT INTO Usuario(Nombre_cliente, Nombre_usuario, Correo, Contraseña) VALUES (%s, %s, %s, %s)", (name, user_name, email, password))
 
+    
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    
+    hashed_password = truncate(hashed_password, 15)
+    
+    with futstore.cursor() as cursor:
+        cursor.execute("INSERT INTO Usuario(Nombre_cliente, Nombre_usuario, Correo, Contraseña) VALUES (%s, %s, %s, %s)", (name, user_name, email, hashed_password))
 
     futstore.commit()
     futstore.close()
     return True
+
 
 
 def select_user(username: str) -> Union[User, None]:

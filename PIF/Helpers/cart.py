@@ -15,9 +15,24 @@ def get_cart(id: int):
             producto = cursor.fetchone()
             compra.append(Product(producto).to_dict())
 
-
     futstore.close()
     return compra
+
+def get_subtotal(id:int):
+    futstore = conection()
+
+    subtotal = 0.0
+    
+    with futstore.cursor() as cursor:
+        cursor.execute(f"SELECT Id_producto, Cantidad FROM carrito WHERE Id_usuario_carrito = '{id}'")
+        productos = cursor.fetchall()
+        for id_producto, cantidad in productos:
+            cursor.execute(f"SELECT Precio FROM jersey WHERE Id_Jersey = '{id_producto}'")
+            precio = cursor.fetchone()[0]  # Obtiene el precio del producto
+            subtotal += precio * cantidad  # Multiplica el precio por la cantidad de productos en el carrito
+
+    futstore.close()
+    return subtotal
 
 
 def add_product(id_user: int, id_product: int,cant: int):
