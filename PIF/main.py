@@ -40,7 +40,7 @@ if __name__ == '__main__':
             "cpu_usage": f"{cpu_usage}%",
             "memory_usage": f"{memory_info.percent}%",
             "app_running": app_running,
-            "message": "Aplicacion funcionando correctamente" if app_running else "Aplicación no está en ejecución"
+            "message": "Aplicacion funcionando correctamente" if app_running else "Aplicacion no está en ejecucion"
         }
         return jsonify(status_info)
 
