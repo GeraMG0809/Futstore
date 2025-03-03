@@ -1,45 +1,66 @@
-"""
-    Este es el archivo principal de la aplicación, recuerden no compartir datos sensibles en este apartado, recomiendo usar .env en todo momento.
-"""
-
-from flask import Flask, session, render_template,request,flash, redirect,url_for,send_from_directory
+from flask import Flask, session, render_template, request, flash, redirect, url_for, send_from_directory, jsonify
 from Helpers.User import *
 from Helpers.Product import *
 from Helpers.Class.user_class import *
 from Helpers.cart import *
 from Helpers.order import *
-
 import os
+import psutil
+
+
+APP_NAME = "python.exe"
+APP_PATH = "C:/Users/Navid/OneDrive/Escritorio/Universidad/Semestre 7/PIF/main.py"
+
+app = Flask(__name__, static_folder='static')
+app.secret_key = "YOUR_SECRET_KEY"
+
 
 if __name__ == '__main__':
 
-    app = Flask(__name__,static_folder='static')
-    app.secret_key = "YOUR_SECRET_KEY"
 
-    """
-        El parámetro de host en 0.0.0.0 hará que puedan ver el render de las rutas de la
-        página desde la ip de su máquina, pueden probarlo con su celular u otra máquina
-        siempre que esten conectados en la misma red.
-
-        También recuersen hacerlo usando https y no http.
-
-        Ejemplo: https://192.168.100.10:5050
-
-        Si quieren cambiar el protocolo de https a http, solo quiten ssl_context como parámetro.
-    """
-
+    def is_app_running(app_name):
+        #Verifica si la aplicación está en ejecución
+        for process in psutil.process_iter(['pid', 'name']):
+            if process.info['name'] == app_name:
+                return True
+        return False
+    
     @app.route('/static/<path:filename>')
     def serve_static(filename):
         return send_from_directory(app.static_folder, filename)
+
+    @app.route('/status')
+    def status():
+        #Devuelve el estado del sistema y de la aplicación
+        cpu_usage = psutil.cpu_percent(interval=1)
+        memory_info = psutil.virtual_memory()
+        app_running = is_app_running(APP_NAME)
+        status_info = {
+            "status": "OK" if app_running else "ERROR",
+            "cpu_usage": f"{cpu_usage}%",
+            "memory_usage": f"{memory_info.percent}%",
+            "app_running": app_running,
+            "message": "Aplicacion funcionando correctamente" if app_running else "Aplicación no está en ejecución"
+        }
+        return jsonify(status_info)
+
+    @app.route('/stop')
+    def stop_app():
+        #Detiene la aplicación en ejecución
+        for process in psutil.process_iter(['pid', 'name']):
+            if process.info['name'] == APP_NAME:
+                os.kill(process.info['pid'], 9)
+                return jsonify({"status": "stopped", "message": f"{APP_NAME} ha sido detenida"})
+        return jsonify({"status": "not running", "message": f"{APP_NAME} no esta en ejecucion"})
 
     # Ruta para la página principal
     @app.route('/')
     def index():
         user = session.get('user')
         Product = select_products()
-       
-    
+
         return render_template('index.html',user = user, Product = Product)
+
 
     @app.route('/add_product_cart/<int:id>', methods=['POST'] )
     def add_product_cart(id):
@@ -114,8 +135,6 @@ if __name__ == '__main__':
         clear_carr(user)
 
         return redirect(url_for('index'))
-
-
 
 
     @app.route('/pay')
