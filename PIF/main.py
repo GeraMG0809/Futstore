@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
 
     def is_app_running(app_name):
-        #Verifica si la aplicación está en ejecución
+        #Verifica si la aplicación está en ejecucion
         for process in psutil.process_iter(['pid', 'name']):
             if process.info['name'] == app_name:
                 return True
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     @app.route('/status')
     def status():
-        #Devuelve el estado del sistema y de la aplicación
+        #Devuelve el estado del sistema y de la aplicacion
         cpu_usage = psutil.cpu_percent(interval=1)
         memory_info = psutil.virtual_memory()
         app_running = is_app_running(APP_NAME)
@@ -46,14 +46,14 @@ if __name__ == '__main__':
 
     @app.route('/stop')
     def stop_app():
-        #Detiene la aplicación en ejecución
+        #Detiene la aplicacion en ejecucion
         for process in psutil.process_iter(['pid', 'name']):
             if process.info['name'] == APP_NAME:
                 os.kill(process.info['pid'], 9)
                 return jsonify({"status": "stopped", "message": f"{APP_NAME} ha sido detenida"})
         return jsonify({"status": "not running", "message": f"{APP_NAME} no esta en ejecucion"})
 
-    # Ruta para la página principal
+    # Ruta para la pagina principal
     @app.route('/')
     def index():
         user = session.get('user')
